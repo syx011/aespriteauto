@@ -3,7 +3,6 @@ name: Auto build Aseprite
 on:
   push:
     branches: main
-
   workflow_dispatch:
 
 permissions:
@@ -39,10 +38,12 @@ jobs:
         run: |
           mkdir build
           cd build
-          cmake "${{ github.workspace }}/src/aseprite" -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel -DLAF_BACKEND=skia -DSKIA_DIR="${{ github.workspace }}/src/skia" -DSKIA_LIBRARY_DIR="${{ github.workspace }}/src/skia/out/Release-x64" -DSKIA_LIBRARY="${{ github.workspace }}/src/skia/out/Release-x64/skia.lib"
+          cmake "${{ github.workspace }}/src/aseprite" -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel -DLAF_BACKEND=skia -DSKIA_DIR="${{ github.workspace }}/src/skia" -DSKIA_LIBRARY_DIR="${{ github.workspace }}/src/skia/out/Release‑x64" -DSKIA_LIBRARY="${{ github.workspace }}/src/skia/out/Release‑x64/skia.lib"
           cmake --build . --config MinSizeRel --target aseprite
-          curl -L -o openssl.zip https://slproweb.com/download/Win64OpenSSL_Light-3_1_2.zip
-          powershell -Command "Expand-Archive openssl.zip -DestinationPath $env:GITHUB_WORKSPACE/openssl"
+
+          curl -L -o openssl.zip https://github.com/openssl/openssl/releases/download/openssl-3.6.0/openssl-3.6.0-x64-windows.zip
+          powershell -Command "Expand‑Archive openssl.zip -DestinationPath $env:GITHUB_WORKSPACE/openssl"
+
           copy "$env:GITHUB_WORKSPACE/openssl/bin/libcrypto-3-x64.dll" ./bin
           copy "$env:GITHUB_WORKSPACE/openssl/bin/libssl-3-x64.dll" ./bin
 
@@ -55,12 +56,12 @@ jobs:
       - name: Zip Aseprite
         run: |
           cd build/bin
-          7z a ../../Aseprite-Windows-x64-${{ steps.get_version.outputs.version }}.zip *
+          7z a ../../Aseprite‑Windows‑x64‑${{ steps.get_version.outputs.version }}.zip *
 
       - name: GH Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Aseprite-Windows-x64-${{ steps.get_version.outputs.version }}
+          name: Aseprite‑Windows‑x64‑${{ steps.get_version.outputs.version }}
           tag_name: ${{ steps.get_version.outputs.version }}
           files: |
-            Aseprite-Windows-x64-${{ steps.get_version.outputs.version }}.zip
+            Aseprite‑Windows‑x64‑${{ steps.get_version.outputs.version }}.zip
