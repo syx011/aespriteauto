@@ -1,4 +1,4 @@
-name: Auto build Aseprite
+name: Build and deploy Aseprite
 
 on:
   schedule:
