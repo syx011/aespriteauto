@@ -41,7 +41,10 @@ jobs:
           cd build
           cmake "${{ github.workspace }}/src/aseprite" -G Ninja -DCMAKE_BUILD_TYPE=MinSizeRel -DLAF_BACKEND=skia -DSKIA_DIR="${{ github.workspace }}/src/skia" -DSKIA_LIBRARY_DIR="${{ github.workspace }}/src/skia/out/Release-x64" -DSKIA_LIBRARY="${{ github.workspace }}/src/skia/out/Release-x64/skia.lib"
           cmake --build . --config MinSizeRel --target aseprite
-          copy "C:/Windows/System32/libcrypto-3-x64.dll" ./bin
+          curl -L -o openssl.zip https://slproweb.com/download/Win64OpenSSL_Light-3_1_2.zip
+          powershell -Command "Expand-Archive openssl.zip -DestinationPath $env:GITHUB_WORKSPACE/openssl"
+          copy "$env:GITHUB_WORKSPACE/openssl/bin/libcrypto-3-x64.dll" ./bin
+          copy "$env:GITHUB_WORKSPACE/openssl/bin/libssl-3-x64.dll" ./bin
 
       - name: Get version
         id: get_version
